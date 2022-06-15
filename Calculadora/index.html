@@ -1,0 +1,174 @@
+<html>
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>Calculado</title>
+    <!-- se usan archivos bootstrapp para borde y centrados para calculadora -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--Se aplica estilos  para que la calculadora centre sus botones y cuadros de salida-->
+    <style>
+        /*Se aplica margen y centrado a la estrucutura de la calculadora*/
+      div#cuerpo{
+        margin: auto;
+        width: 260px;
+        margin-left:100px;
+        margin-top:50px;
+     
+        
+      }
+        /*Se aplica un estilo de  centrado a los botones */
+        #table{
+            text-align:center;
+            
+        }
+       /* aqui se configura el color de fondo del la plantilla html */
+        #body{
+
+            background-color: white;
+        }
+        /*se configura las caracteristicas de la imagen*/
+        #img{
+            margin-top:100px;
+            margin-right: 150px;
+            margin-left: 100px;
+
+        }
+    </style>
+
+
+      
+   <!-- se configura los botones  que tiene la funcion  reset() para eliminar texto en cuadro de salida de informacion -->
+    <script>
+        function reset(){
+            edt =document.getElementById("inputResultado");
+            edt.value="";
+        }
+        /*Se configura los botones de borrar uno por uno cada caracter  en el cuadro de salida de informacion*/
+        function quitarItem(){
+            edt = document.getElementById("inputResultado")
+            valorViejo=edt.value;
+            valorNuevo=valorViejo.slice(0,(valorViejo.length-1));
+            edt.value=valorNuevo;
+
+        }
+
+        /*Se configura el  boton para  agregar  el 7 8 9 4 5 6 1 2 3 0 . - + * / */
+
+        function agregarItem(item){
+
+            edt=document.getElementById("inputResultado");
+
+            valorViejo=edt.value;
+            valorNuevo=valorViejo+item;
+            edt.value=valorNuevo
+
+        }
+
+        function raiz(){
+            edt=document.getElementById("inputResultado");
+            valor=edt.value;
+
+            $.ajax({
+                url:'server.php',
+                method:'post',
+                data:{'raiz':valor}
+
+
+            }).done(function(respuesta){
+                edt.value=respuesta;
+            });
+
+        }
+
+        function calcular(){
+            edt=document.getElementById("inputResultado");
+            valor=edt.value;
+
+            $.ajax({
+                url:'server.php',
+                method:'post',
+                data:{'calculo':valor}
+
+
+            }).done(function(resultado){
+                edt.value=resultado;
+            });
+
+
+        }
+
+
+
+    </script>
+
+
+</head>
+
+<body id="body" background="img/imgfondo.jpg" >
+    <!--Se coloca el titulo principal de la pagina-->
+    <h1><center><font color="white">CALCULADORA</font></center></h1>
+
+    <!--se llama la imagen que queramos mostrar en el archivo html-->
+    <img id="img" src="img/imagen_1.png" align="right" width="450" >
+
+    <div id="cuerpo" >  <!--Se coloca un id="cuerpo" id="table" para hacer referencia a la estructura que esta conteniendo -->
+
+        <!-- el color del  borde y   los colores de los botones se debe a la class="table table-bordered table-hover"  -->
+
+      <table id="table"   class="table table-bordered table-hover" >
+         <!-- La primera fila de la caculadora --> 
+         <tr>
+            <!--con el colspan permite alarga el cuadro de salida de informacion-->
+            <td colspan="4"><input type="text" class="form-control" id="inputResultado" /> </td>
+         </tr>
+
+        <!--Se crea la segunda fila con 4 botones--> 
+         <tr>
+           <td><button type="button" onclick="quitarItem() ;" class="btn btn-primary"> <-- </button> </td>
+           <td><button type="button" onclick="reset();" class="btn btn-primary"> CE </button> </td>
+           <td><button type="button" onclick="reset();" class="btn btn-primary"> C </button> </td>
+           <td><button type="button" onclick="agregarItem('/');" class="btn btn-primary"> /</button> </td>
+         </tr>
+         <!--Se crea la tercera fila con 4 botones--> 
+         <tr>
+            <td><button type="button" onclick="agregarItem(7) ; " class="btn btn-primary"> 7 </button> </td>
+            <td><button type="button" onclick="agregarItem(8);" class="btn btn-primary"> 8</button> </td>
+            <td><button type="button" onclick="agregarItem(9);" class="btn btn-primary"> 9</button> </td>
+            <td><button type="button" onclick="agregarItem('*');" class="btn btn-primary"> *</button> </td>
+          </tr>
+
+           <!--Se crea la cuarta fila con 4 botones--> 
+          <tr>
+            <td><button type="button" onclick="agregarItem(4) ; " class="btn btn-primary"> 4 </button> </td>
+            <td><button type="button" onclick="agregarItem(5);" class="btn btn-primary"> 5 </button> </td>
+            <td><button type="button" onclick="agregarItem(6);" class="btn btn-primary"> 6 </button> </td>
+            <td><button type="button" onclick="agregarItem('+');" class="btn btn-primary"> +</button> </td>
+          </tr>
+
+           <!--Se crea la quinta fila con 4 botones--> 
+          <tr>
+            <td><button type="button" onclick="agregarItem(1) ; " class="btn btn-primary"> 1</button> </td>
+            <td><button type="button" onclick="agregarItem(2);" class="btn btn-primary"> 2 </button> </td>
+            <td><button type="button" onclick="agregarItem(3);" class="btn btn-primary"> 3 </button> </td>
+            <td><button type="button" onclick="agregarItem('-');" class="btn btn-primary"> -</button> </td>
+          </tr>
+
+          <!--Se crea la sexta fila con 4 botones--> 
+          <tr>
+            <td><button type="button" onclick="agregarItem(0) ; " class="btn btn-primary"> 0 </button> </td>
+            <td><button type="button" onclick="agregarItem('.');" class="btn btn-primary"> . </button> </td>
+            <td><button type="button" onclick="raiz();" class="btn btn-primary"> Raiz </button> </td>
+            <td><button type="button" onclick="calcular();" class="btn btn-primary">=</button> </td>
+          </tr>
+
+         </table>
+    </div>
+
+
+</body>
+
+</html>
